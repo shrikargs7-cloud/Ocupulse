@@ -1,0 +1,38 @@
+cat > .gitignore <<'EOF'
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+venv/
+.venv/
+env/
+
+# Python environment/config
+.env
+.env.*
+
+# Node / Frontend
+node_modules/
+.next/
+out/
+dist/
+build/
+
+# Logs
+*.log
+
+# IDE
+.vscode/
+.idea/
+
+# OS / temporary
+*.tmp
+*.temp
+EOF
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
