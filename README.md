@@ -139,37 +139,38 @@ API documentation available at **`http://localhost:8000/docs`** (Swagger UI)
 
 ## 🏗️ System Architecture
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    FRONTEND LAYER                           │
-│  React + Vite + TypeScript + Tailwind CSS                   │
-│  ├─ Landing Page (Hero, Problem Overview)                   │
-│  ├─ Analysis Studio (Drag & Drop, Demo Samples)             │
-│  ├─ Interactive Dashboard (Metrics, Visualizers)            │
-│  ├─ Analytics Charts (Distribution & Topology)              │
-│  └─ Clinical Report Generator (PDF Export)                  │
-└────────────────────┬────────────────────────────────────────┘
-                     │ REST API (JSON + Base64)
-                     │
-┌────────────────────▼────────────────────────────────────────┐
-│                    BACKEND LAYER                            │
-│  FastAPI + Python + SQLite                                  │
-│  ├─ /api/health (Health Check)                              │
-│  ├─ /api/analyze (Core Analysis)                            │
-│  ├─ /api/demo-samples (Benchmark Images)                    │
-│  ├─ /api/history (Session Management)                       │
-│  └─ Screening Interpretation Engine                         │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-┌────────────────────▼────────────────────────────────────────┐
-│              COMPUTER VISION PIPELINE                       │
-│  ├─ ROI Detection (Circular Field Isolation)                │
-│  ├─ Green Channel Extraction & CLAHE Enhancement            │
-│  ├─ Multi-Scale Vessel Segmentation                         │
-│  ├─ Zhang-Suen Skeletonization                              │
-│  ├─ Topology & Geometry Extraction                          │
-│  └─ Image Quality Assessment                                │
-└─────────────────────────────────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph Client Application Layer [Frontend Layer - React 18 + Vite + TypeScript]
+        Landing[Landing Page & Clinical Problem Overview]
+        Studio[Analysis Studio - Drag & Drop / Demo Samples]
+        Dashboard[Interactive Telemetry Dashboard]
+        Charts[Analytics Charts - Distribution & Topology]
+        Report[Clinical Report Generator - PDF Export]
+    end
+
+    ClientApplicationLayer -->|REST API - JSON + Base64 Over HTTPS| BackendLayer
+
+    subgraph Backend Services Layer [Backend Layer - FastAPI + Python + SQLite]
+        HealthCheck[/api/health - Diagnostics/]
+        AnalyzeCore[/api/analyze - Core Diagnostic Run/]
+        DemoEndpoint[/api/demo-samples - Standard Datasets/]
+        HistoryEndpoint[/api/history - Patient Sessions/]
+        Interpretation[Screening Interpretation & Biomarker Engine]
+    end
+
+    BackendServicesLayer --> CVPipeline
+
+    subgraph Vision Pipeline Layer [Computer Vision Processing Pipeline]
+        ROI[1. Circular ROI Detection & FOV Isolation]
+        CLAHE[2. Green Channel Extraction & Adaptive CLAHE]
+        Segment[3. Multi-Scale Vessel Segmentation]
+        Skeleton[4. Zhang-Suen Morphological Skeletonization]
+        Topology[5. Bifurcation & Tortuosity Geometry Extraction]
+        Quality[6. Image Sharpness & Contrast Quality Assessor]
+        
+        ROI --> CLAHE --> Segment --> Skeleton --> Topology & Quality
+    end
 ```
 
 ---
